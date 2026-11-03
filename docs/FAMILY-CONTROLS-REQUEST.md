@@ -6,6 +6,8 @@
 
 **Status:** not submitted yet (2026-11-03).
 
+**Update 2026-11-03:** the form at that URL is now one page with no questions: name, email and team (pre-filled), Apple's terms (the app's primary purpose must be personal device management, which Lockout is), and a **Get Entitlement** button. Pressing it accepts those terms, so it is Matteo's click. The text below is kept for when Apple writes back or asks follow-up questions, and in case the extension IDs need their own request later (Identifiers → each ID → Family Controls shows whether Distribution is available).
+
 ## Answers to paste
 
 **App name:** Lockout

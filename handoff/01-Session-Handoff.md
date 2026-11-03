@@ -1,5 +1,13 @@
 # Session handoff (newest first, prepend only)
 
+## 2026-11-03 night: Apple portal done
+
+- Registered device "Matteo iPhone 15 Pro" (iPhone16,1, iOS 26.7.1, UDID 00008130-000228A93A3A001C).
+- App Group `group.fun.thedailygame.lockout`; App IDs `fun.thedailygame.lockout` (AK642DC733), `.monitor` (7F7R38Q7FK), `.shield` (5SQCP4HK33), each verified with Family Controls (Development) + App Groups (1 group assigned). In-App Purchase is on by default; harmless.
+- Signing key: the `.p8` in Downloads\Codemagic key is the App Store Connect API key (already in Codemagic), NOT the certificate key. Generated a new RSA key `Downloads\Codemagic key\lockout_certificate_private_key` (not in repo); Matteo pastes it into Codemagic (form pre-filled: CERTIFICATE_PRIVATE_KEY, group appstore_credentials, Secret). It will mint a new Apple Development certificate on first dev build.
+- Entitlement form: one "Get Entitlement" button that accepts terms; left for Matteo.
+- **Next once the secret is in:** `npm run ship` in C:\dev\lockout → wait for `lockout-dev` → download .ipa → `npm run phone:devmode` (first time) → `npm run phone:install`.
+
 ## 2026-11-03 evening: repo live, first Codemagic check green
 
 - GitHub: private `MatteoCaruso1/lockout`, main pushed.
