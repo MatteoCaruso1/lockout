@@ -172,10 +172,10 @@ struct OnboardingView: View {
 
     private func numbered(_ lines: [String]) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            ForEach(Array(lines.enumerated()), id: \.offset) { index, line in
+            ForEach(Array(lines.enumerated()), id: \.offset) { item in
                 HStack(alignment: .firstTextBaseline, spacing: 10) {
-                    Text("\(index + 1).").bold()
-                    Text(.init(line))
+                    Text("\(item.offset + 1).").bold()
+                    Text(LocalizedStringKey(item.element))
                 }
             }
         }

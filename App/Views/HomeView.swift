@@ -108,12 +108,12 @@ struct HistoryView: View {
     @EnvironmentObject private var model: AppModel
 
     var body: some View {
-        List(Array(model.state.events.reversed().enumerated()), id: \.offset) { _, event in
+        List(Array(model.state.events.reversed().enumerated()), id: \.offset) { item in
             VStack(alignment: .leading, spacing: 4) {
-                Text(event.detail)
-                Text(Format.dateTime(event.date)).font(.caption).foregroundStyle(.secondary)
+                Text(item.element.detail)
+                Text(Format.dateTime(item.element.date)).font(.caption).foregroundStyle(.secondary)
             }
-            .foregroundStyle(event.kind == "revoked" || event.kind == "clock" ? Color.orange : Color.primary)
+            .foregroundStyle(item.element.kind == "revoked" || item.element.kind == "clock" ? Color.orange : Color.primary)
         }
         .navigationTitle("History")
         .overlay {
