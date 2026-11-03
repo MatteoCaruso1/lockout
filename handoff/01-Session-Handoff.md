@@ -1,5 +1,14 @@
 # Session handoff (newest first, prepend only)
 
+## 2026-11-03 18:25 ET: first installable build ready, waiting on the phone
+
+- `ios-dev-0.1.0-b3` (Codemagic build 6aea6af1278b7d31e9043ac4) green: tests, dev signing for 3 IDs, .ipa, check-ipa ("3 targets entitled, no networking, Release build clean").
+- b1/b2 failed at signing: Codemagic's variable field is single-line, so the pasted key lost its newlines (b1), and the value turned out to have no BEGIN/END lines (b2). `scripts/cert-key.sh` now rebuilds the PEM from either form and logs only its shape. Don't revert it.
+- `C:\Users\matte\Downloads\Lockout.ipa` downloaded and inspected: v0.1.0 build 8, profile "Lockout ios_app_development" includes the iPhone UDID, family-controls + app group on all three, expires 2027-11-03.
+- Entitlement: Matteo pressed Get Entitlement (2026-11-03). Watch email for Apple's reply.
+- Developer Mode is OFF on the phone; the toggle was revealed with `npm run phone:devmode`.
+- **Next (needs the phone plugged in):** Settings → Privacy & Security → Developer Mode → On → restart → Turn On. Then `npm run phone:install` (picks the newest .ipa in Downloads), open Lockout, and run docs/TEST-CHECKLIST.md section A.
+
 ## 2026-11-03 night: Apple portal done
 
 - Registered device "Matteo iPhone 15 Pro" (iPhone16,1, iOS 26.7.1, UDID 00008130-000228A93A3A001C).
