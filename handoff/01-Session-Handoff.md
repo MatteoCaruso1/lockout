@@ -1,5 +1,12 @@
 # Session handoff (newest first, prepend only)
 
+## 2026-11-03 evening: repo live, first Codemagic check green
+
+- GitHub: private `MatteoCaruso1/lockout`, main pushed.
+- Codemagic: app `lockout` (id 6aea5b7db309907188297ad3, personal account; the Apple key from 100DG is connected at account level). Build #1 `lockout-check`: **26/26 unit tests pass, all three targets compile** (first try).
+- Webhook created via "Update webhook" (needed so `npm run ship` tags start builds); this push tests it.
+- Waiting on Matteo: (a) Apple developer sign-in (tab left open), (b) paste CERTIFICATE_PRIVATE_KEY into the prepared Codemagic form (lockout app → Environment variables, group appstore_credentials, Secret ticked), (c) plug in iPhone + Trust for `npm run phone:udid`.
+
 ## 2026-11-03 (later): blocked on browser access
 
 **State:** 2 local commits on `main` (30b35d2, ed9163d). **No GitHub remote yet; nothing pushed.** Code never compiled (no Mac).
