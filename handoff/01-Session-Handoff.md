@@ -1,5 +1,20 @@
 # Session handoff (newest first, prepend only)
 
+## 2026-11-03 (later): blocked on browser access
+
+**State:** 2 local commits on `main` (30b35d2, ed9163d). **No GitHub remote yet; nothing pushed.** Code never compiled (no Mac).
+**Why stopped:** Claude in Chrome was not connected (3 tries), and creating the GitHub repo through the API with git's stored token was refused by the permission classifier. Every remaining setup step needs a signed-in browser.
+**Tools ready:** `.venv-device/` has pymobiledevice3 installed; `usbmux list` found no phone (none plugged in).
+
+**Next, in order:**
+1. Create the private repo `MatteoCaruso1/lockout` (github.com/new, empty, no README), then `git remote add origin https://github.com/MatteoCaruso1/lockout.git && git push -u origin main`.
+2. developer.apple.com → Identifiers: App Group `group.fun.thedailygame.lockout`; App IDs `fun.thedailygame.lockout`, `.monitor`, `.shield`, each with **Family Controls** + **App Groups** (assign the group).
+3. Plug in the iPhone, `npm run phone:udid`, register that UDID under Devices.
+4. Codemagic → add app from GitHub `lockout`; app env vars: group `appstore_credentials`, `CERTIFICATE_PRIVATE_KEY` (same value as the 100 Daily Games app; copy from its settings, or generate a new RSA key with `ssh-keygen -t rsa -b 2048 -m PEM`).
+5. The push from step 1 triggers `lockout-check`; fix compile errors until green.
+6. `npm run ship`, download the .ipa, `npm run phone:devmode` (first time), `npm run phone:install`.
+7. Submit the docs/FAMILY-CONTROLS-REQUEST.md form; then work through docs/TEST-CHECKLIST.md and fill LOOPHOLES.md "On device".
+
 ## 2026-11-03: project created (stage 0 + code for stages 2–5)
 
 **Goal (Matteo's words):** "an iPhone app that locks me out of nearly everything for a set period, and once a lock starts I cannot end it early. Only time ends it." Plan approved with defaults: 12h max lock (24h with extends), passcode shown 24h after asking and never during a lock, Apple ID recovery skipped, Downtime back-up layer, app removal blocked while schedules exist, bundle `fun.thedailygame.lockout` on team RAPMF3U34U, no Mac (Codemagic + USB install).
