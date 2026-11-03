@@ -1,0 +1,111 @@
+# XcodeGen spec. There is no Mac, so nobody edits an Xcode project: Codemagic
+# runs `xcodegen generate` on every build and the .xcodeproj is never committed.
+#
+# LOCKOUT_VERSION / LOCKOUT_BUILD come from the git tag (see codemagic.yaml).
+name: Lockout
+
+options:
+  bundleIdPrefix: fun.thedailygame
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    DEVELOPMENT_TEAM: RAPMF3U34U
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: ${LOCKOUT_VERSION}
+    CURRENT_PROJECT_VERSION: ${LOCKOUT_BUILD}
+    TARGETED_DEVICE_FAMILY: "1"
+    ENABLE_USER_SCRIPT_SANDBOXING: "YES"
+
+packages:
+  LockoutCore:
+    path: LockoutCore
+
+targets:
+  Lockout:
+    type: application
+    platform: iOS
+    sources:
+      - App
+      - Shared
+    dependencies:
+      - package: LockoutCore
+      - target: LockoutMonitor
+      - target: LockoutShield
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: fun.thedailygame.lockout
+        PRODUCT_NAME: Lockout
+        ASSETCATALOG_COMPILER_APPICON_NAME: ""
+    entitlements:
+      path: Config/Lockout.entitlements
+      properties:
+        com.apple.developer.family-controls: true
+        com.apple.security.application-groups: [group.fun.thedailygame.lockout]
+    info:
+      path: Config/Lockout-Info.plist
+      properties:
+        CFBundleDisplayName: Lockout
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        UIRequiresFullScreen: true
+        ITSAppUsesNonExemptEncryption: false
+    scheme:
+      testTargets: []
+
+  LockoutMonitor:
+    type: app-extension
+    platform: iOS
+    sources:
+      - Monitor
+      - Shared
+    dependencies:
+      - package: LockoutCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: fun.thedailygame.lockout.monitor
+    entitlements:
+      path: Config/LockoutMonitor.entitlements
+      properties:
+        com.apple.developer.family-controls: true
+        com.apple.security.application-groups: [group.fun.thedailygame.lockout]
+    info:
+      path: Config/LockoutMonitor-Info.plist
+      properties:
+        CFBundleDisplayName: Lockout Monitor
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.deviceactivity.monitor-extension
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).LockoutMonitor
+
+  LockoutShield:
+    type: app-extension
+    platform: iOS
+    sources:
+      - Shield
+      - Shared/AppGroup.swift
+      - Shared/DeviceClock.swift
+    dependencies:
+      - package: LockoutCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: fun.thedailygame.lockout.shield
+    entitlements:
+      path: Config/LockoutShield.entitlements
+      properties:
+        com.apple.developer.family-controls: true
+        com.apple.security.application-groups: [group.fun.thedailygame.lockout]
+    info:
+      path: Config/LockoutShield-Info.plist
+      properties:
+        CFBundleDisplayName: Lockout Shield
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.ManagedConfiguration.shield-configuration-service
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).ShieldConfigurationExtension

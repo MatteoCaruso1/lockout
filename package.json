@@ -1,0 +1,12 @@
+{
+  "name": "lockout",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Lockout: strict, no-override iPhone lock app. Node is only used for the ship and phone scripts; the app is SwiftUI.",
+  "scripts": {
+    "ship": "node scripts/ship.mjs",
+    "phone:udid": "node scripts/phone.mjs udid",
+    "phone:install": "node scripts/phone.mjs install",
+    "phone:devmode": "node scripts/phone.mjs devmode"
+  }
+}

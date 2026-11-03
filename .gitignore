@@ -1,0 +1,22 @@
+# Generated on Codemagic by XcodeGen
+Lockout.xcodeproj/
+Config/*.plist
+Config/*.entitlements
+
+# Swift / Xcode
+.build/
+.swiftpm/
+DerivedData/
+build/
+*.ipa
+xcuserdata/
+
+# Local tools
+.venv-device/
+node_modules/
+
+# Secrets never live in this repo
+*.p8
+*.p12
+*.key
+*.pem
