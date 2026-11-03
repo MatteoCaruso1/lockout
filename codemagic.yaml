@@ -65,12 +65,13 @@ definitions:
       # in the Apple Developer account, so register a phone before building.
       script: |
         set -e
+        KEY_FILE=$(bash scripts/cert-key.sh)
         keychain initialize
         for id in fun.thedailygame.lockout fun.thedailygame.lockout.monitor fun.thedailygame.lockout.shield; do
           app-store-connect fetch-signing-files "$id" \
             --type IOS_APP_DEVELOPMENT \
             --platform IOS \
-            --certificate-key "@env:CERTIFICATE_PRIVATE_KEY" \
+            --certificate-key "@file:$KEY_FILE" \
             --create
         done
         keychain add-certificates
@@ -187,12 +188,13 @@ workflows:
       - name: Create and apply App Store signing files (3 bundle ids)
         script: |
           set -e
+          KEY_FILE=$(bash scripts/cert-key.sh)
           keychain initialize
           for id in fun.thedailygame.lockout fun.thedailygame.lockout.monitor fun.thedailygame.lockout.shield; do
             app-store-connect fetch-signing-files "$id" \
               --type IOS_APP_STORE \
               --platform IOS \
-              --certificate-key "@env:CERTIFICATE_PRIVATE_KEY" \
+              --certificate-key "@file:$KEY_FILE" \
               --create
           done
           keychain add-certificates
