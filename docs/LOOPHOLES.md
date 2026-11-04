@@ -28,6 +28,7 @@ Status key: **Closed** = cannot be done during a lock. **Mitigated** = can be do
 | 21 | Phone app / emergency calls | **Open, by design** | not tested yet | Apple never lets apps block calls. You asked for calls to work. |
 | 22 | Settings app | **Open, by design** | not tested yet | Apple doesn't allow shielding Settings. That is why #1 matters. |
 | 23 | Use another device (iPad, Mac, laptop) | **Open** | n/a | Lockout only locks this iPhone. |
+| 24 | Apps on iOS's Always Allowed list | **Mitigated** (setup step 3) | **Open on first test (2026-11-03):** 100 Daily Games, Messenger, Maps, Calendar, Weather, Sportsnet and Partiful all opened during the 2-minute test lock; everything else was blocked and the lock ended on time | iOS never blocks an Always Allowed app, and no app can override that ([forum](https://developer.apple.com/forums/thread/724419)). Setup now has you remove every app except Phone. Adding an app back needs the sealed Screen Time passcode, so once the list is empty it stays empty. Re-test pending. |
 
 ## The bottom line, plainly
 Lockout makes ending a lock early slow, deliberate and logged. It cannot make it impossible. One move, switching off its Screen Time access in Settings with Face ID, ends a lock straight away, and Apple gives apps no way to block that. Downtime with a sealed passcode is the one layer that survives it, and only for your recurring window.

@@ -90,15 +90,15 @@ struct OnboardingView: View {
 
     private var messages: some View {
         Group {
-            stepTitle(3, "Let Lockout block Messages")
-            Text("iOS lets Messages through by default. Remove it:")
+            stepTitle(3, "Empty the Always Allowed list")
+            Text("iOS lets every app on its Always Allowed list through any lock, and no app can override that. Messages and Maps are on it by default. Remove everything except Phone:")
             numbered([
                 "Open **Settings → Screen Time → Always Allowed**.",
-                "Tap the red minus next to **Messages**, then **Remove**.",
+                "Under **Allowed Apps**, tap the red minus next to every app except **Phone**, then **Remove**.",
                 "Come back here.",
             ])
             openSettingsButton
-            primary("I removed Messages") { model.setOnboarding(\.messagesRemoved) }
+            primary("Only Phone is left") { model.setOnboarding(\.messagesRemoved) }
         }
     }
 
@@ -146,7 +146,7 @@ struct OnboardingView: View {
         if model.state.onboarding.testLockStartedAt == nil || testFailed {
             Text("Start a real 2-minute lock. While it runs, try opening a few apps, Safari and Messages. They should all show the Lockout screen. It ends by itself.")
             if testFailed {
-                Text("Check that Messages is removed from Always Allowed and that Lockout still has Screen Time access, then run the test again.")
+                Text("Check that only Phone is left in Settings → Screen Time → Always Allowed (any app listed there is never blocked) and that Lockout still has Screen Time access, then run the test again.")
                     .foregroundStyle(.orange)
             }
             primary("Start 2-minute test lock") {

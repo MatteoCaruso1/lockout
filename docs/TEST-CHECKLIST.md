@@ -7,7 +7,7 @@ Do these in order. Each test begins with a short lock, so a mistake never costs 
 ## A. Setup (onboarding)
 - [ ] A1. Open Lockout. "Allow access" brings up Apple's Screen Time prompt; confirm with Face ID.
 - [ ] A2. "Choose Lockout": search for Lockout, tick it, tap Done.
-- [ ] A3. Remove Messages from Always Allowed, as the app shows.
+- [ ] A3. Remove every app except Phone from Always Allowed, as the app shows (anything left there is never blocked).
 - [ ] A4. (Optional) Set Downtime to your usual nightly window.
 - [ ] A5. Set the passcode Lockout shows. **Tap Cancel when iOS asks for an Apple ID.** If you did Downtime, switch on Block at Downtime. Tap "Seal it".
 - [ ] A6. Start the 2-minute test lock. During it, try: Safari, Messages, Instagram (or any app), App Store, Settings. Write down which ones opened.
