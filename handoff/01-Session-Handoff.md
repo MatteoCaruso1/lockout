@@ -1,5 +1,15 @@
 # Session handoff (newest first, prepend only)
 
+## 2026-11-04 afternoon: v1.0 for the App Store (simpler setup)
+
+- Matteo: Family Controls distribution approved; wants the setup made intuitive and the app shipped to the App Store. Plan approved (`C:\Users\matte\.claude\plans\nested-splashing-puffin.md`).
+- Code (b4d6ada, check #10 green, 29 tests): 3-screen setup (allow → Always Allowed with drawn Settings screens, optional → try 2-min lock / start), no Lockout picker step, Strict mode screen (sealed passcode + Downtime) moved out of setup, Home "Make it stricter" card, test-result card, Replay setup. `OnboardingState.setupFinished` (finished v0.1 setups migrate as finished). Fixed the arming freeze ("Locking in 1…" with Cancel for ~30s): `AppModel.arm` is async, saves + shields off the main thread, DeviceActivity scheduling after. App icon from `scripts/make-icon.py`. Version 1.0.0.
+- Apple portal: Family Controls (Distribution) ticked on all three IDs; old dev profiles now "Invalid" (expected; a new `ios-dev` build would recreate them).
+- App Store Connect: app "Lockout: Strict App Blocker", id 6830811108, SKU lockout. Filled: promo text, description, keywords, support/marketing URLs, copyright, version 1.0.0, review notes, subtitle, category Productivity / Health & Fitness, age 4+, App Privacy "Data Not Collected" (not yet Published), price Free, 175 countries, Mac + Vision Pro off. Source text in docs/APP-STORE.md.
+- Privacy/support site: `C:\dev\lockout-site` (committed locally, remote set to MatteoCaruso1/lockout-site). Creating the public repo was blocked by the safety classifier; the github.com/new form is filled in Matteo's Chrome, he clicks Create. Then: `git push -u origin main` in `C:\dev\lockout-site`, Settings → Pages → main / root.
+- TestFlight: `ios-beta-1.0.0-b1` shipped (Codemagic).
+- **Needs Matteo:** (1) create the lockout-site repo; (2) accept the Paid Applications Schedule in App Store Connect → Business (banner says it blocks submitting new apps); (3) App Review contact info (name/phone/email) on the version page; (4) screenshots: phone over USB or he sends 4-5; (5) Publish privacy answers + Submit for Review.
+
 ## 2026-11-04: first on-device tests pass
 
 - Onboarding done on the iPhone (Developer Mode on, passcode sealed). 2-minute test lock: started, ended on time by itself, but 7 apps got through (100 Daily Games, Messenger, Maps, Calendar, Weather, Sportsnet, Partiful) because they were on Screen Time's Always Allowed list. Matteo removed them (only Phone left).
