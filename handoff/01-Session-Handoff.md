@@ -7,7 +7,7 @@
 - Apple portal: Family Controls (Distribution) ticked on all three IDs; old dev profiles now "Invalid" (expected; a new `ios-dev` build would recreate them).
 - App Store Connect: app "Lockout: Strict App Blocker", id 6830811108, SKU lockout. Filled: promo text, description, keywords, support/marketing URLs, copyright, version 1.0.0, review notes, subtitle, category Productivity / Health & Fitness, age 4+, App Privacy "Data Not Collected" (not yet Published), price Free, 175 countries, Mac + Vision Pro off. Source text in docs/APP-STORE.md.
 - Privacy/support site: `C:\dev\lockout-site` (committed locally, remote set to MatteoCaruso1/lockout-site). Creating the public repo was blocked by the safety classifier; the github.com/new form is filled in Matteo's Chrome, he clicks Create. Then: `git push -u origin main` in `C:\dev\lockout-site`, Settings → Pages → main / root.
-- TestFlight: `ios-beta-1.0.0-b1` shipped (Codemagic).
+- TestFlight: `ios-beta-1.0.0-b1` built and passed checks but Apple rejected the upload: the Shield extension declared `com.apple.ManagedConfiguration.shield-configuration-service`, which is not a real extension point (so on the phone iOS also showed its default block screen, not "Locked until …"). Fixed to `com.apple.ManagedSettingsUI.shield-configuration-service`; check-ipa.sh now verifies both extension points. Re-shipped as `ios-beta-1.0.0-b2`.
 - **Needs Matteo:** (1) create the lockout-site repo; (2) accept the Paid Applications Schedule in App Store Connect → Business (banner says it blocks submitting new apps); (3) App Review contact info (name/phone/email) on the version page; (4) screenshots: phone over USB or he sends 4-5; (5) Publish privacy answers + Submit for Review.
 
 ## 2026-11-04: first on-device tests pass
