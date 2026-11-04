@@ -5,14 +5,14 @@ Do these in order. Each test begins with a short lock, so a mistake never costs 
 **Before you start:** the newest build is installed (see README "Install on your iPhone"), and you have about 45 minutes. Keep a second device nearby only to read this list.
 
 ## A. Setup (onboarding)
-- [ ] A1. Open Lockout. "Allow access" brings up Apple's Screen Time prompt; confirm with Face ID.
-- [ ] A2. "Choose Lockout": search for Lockout, tick it, tap Done.
-- [ ] A3. Remove every app except Phone from Always Allowed, as the app shows (anything left there is never blocked).
-- [ ] A4. (Optional) Set Downtime to your usual nightly window.
-- [ ] A5. Set the passcode Lockout shows. **Tap Cancel when iOS asks for an Apple ID.** If you did Downtime, switch on Block at Downtime. Tap "Seal it".
-- [ ] A6. Start the 2-minute test lock. During it, try: Safari, Messages, Instagram (or any app), App Store, Settings. Write down which ones opened.
-- [ ] A7. After 2 minutes, without touching Lockout, check that apps open again by themselves (the release comes from the extension, not the app).
-- [ ] A8. Back in Lockout, answer "Yes, everything was blocked" (Settings should have opened, Apple doesn't allow blocking it).
+- [x] A1. Open Lockout. "Allow access" brings up Apple's Screen Time prompt; confirm with Face ID.
+- [x] A2. "Choose Lockout": search for Lockout, tick it, tap Done.
+- [x] A3. Remove every app except Phone from Always Allowed, as the app shows (anything left there is never blocked).
+- [x] A4. (Optional) Set Downtime to your usual nightly window.
+- [x] A5. Set the passcode Lockout shows. **Tap Cancel when iOS asks for an Apple ID.** If you did Downtime, switch on Block at Downtime. Tap "Seal it".
+- [x] A6. Start the 2-minute test lock. During it, try: Safari, Messages, Instagram (or any app), App Store, Settings. Write down which ones opened.
+- [x] A7. After 2 minutes, without touching Lockout, check that apps open again by themselves (the release comes from the extension, not the app).
+- [x] A8. Back in Lockout, answer "Yes, everything was blocked" (Settings should have opened, Apple doesn't allow blocking it).
 
 ## B. Core lock
 - [ ] B1. Custom lock of 15 minutes. The arming screen says "You cannot end this early". Tap the button, then **Cancel** during the countdown: no lock starts.

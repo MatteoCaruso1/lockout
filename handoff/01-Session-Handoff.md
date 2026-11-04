@@ -1,5 +1,12 @@
 # Session handoff (newest first, prepend only)
 
+## 2026-11-04: first on-device tests pass
+
+- Onboarding done on the iPhone (Developer Mode on, passcode sealed). 2-minute test lock: started, ended on time by itself, but 7 apps got through (100 Daily Games, Messenger, Maps, Calendar, Weather, Sportsnet, Partiful) because they were on Screen Time's Always Allowed list. Matteo removed them (only Phone left).
+- Setup step 3 now says "remove everything except Phone" (commit 1daa8b6; not rebuilt, only wording). LOOPHOLES.md row 24 records it.
+- 15-minute re-test: all 7 blocked, ended by itself. Checklist A done; B1-B3 and B9 effectively covered by this run.
+- **Next:** TEST-CHECKLIST B4-B8 (extend, app removal, restart, force-quit, Low Power), then C (loopholes), D (schedules), E (passcode). Fill LOOPHOLES.md "On device" as results come in.
+
 ## 2026-11-03 22:23 ET: installed on the iPhone
 
 - `npm run phone:install` succeeded: Lockout 0.1.0 (8) is on the phone (`apps query fun.thedailygame.lockout` confirms).
