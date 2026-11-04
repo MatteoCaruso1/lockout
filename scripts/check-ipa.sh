@@ -4,6 +4,8 @@
 #   1. all three targets carry the Family Controls and App Group entitlements
 #   2. a Release build contains no trace of the DEBUG emergency release
 #   3. no target uses networking (Lockout must never touch the network)
+#   4. each extension declares the extension point iOS expects (a wrong one
+#      is silently ignored on the phone and rejected by App Store upload)
 set -euo pipefail
 
 IPA=$(ls build/ios/ipa/*.ipa | head -1)
@@ -32,6 +34,14 @@ for bundle in "${BUNDLES[@]}"; do
   fi
 done
 
+check_point() {
+  local got
+  got=$(/usr/libexec/PlistBuddy -c 'Print :NSExtension:NSExtensionPointIdentifier' "$APP/PlugIns/$1/Info.plist" 2>/dev/null || true)
+  [ "$got" = "$2" ] || { echo "FAIL: $1 extension point is '$got', expected '$2'"; FAIL=1; }
+}
+check_point LockoutMonitor.appex com.apple.deviceactivity.monitor-extension
+check_point LockoutShield.appex com.apple.ManagedSettingsUI.shield-configuration-service
+
 if [ "${LOCKOUT_CONFIG:-Release}" = "Release" ]; then
   if grep -rqa "LOCKOUT_DEBUG_EMERGENCY_RELEASE" "$APP"; then
     echo "FAIL: Release build contains the DEBUG emergency release"; FAIL=1
@@ -39,4 +49,4 @@ if [ "${LOCKOUT_CONFIG:-Release}" = "Release" ]; then
 fi
 
 if [ "$FAIL" -ne 0 ]; then exit 1; fi
-echo "OK: 3 targets entitled, no networking, ${LOCKOUT_CONFIG:-Release} build clean"
+echo "OK: 3 targets entitled, extension points right, no networking, ${LOCKOUT_CONFIG:-Release} build clean"
