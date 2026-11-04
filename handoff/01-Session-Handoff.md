@@ -1,5 +1,11 @@
 # Session handoff (newest first, prepend only)
 
+## 2026-11-03 22:23 ET: installed on the iPhone
+
+- `npm run phone:install` succeeded: Lockout 0.1.0 (8) is on the phone (`apps query fun.thedailygame.lockout` confirms).
+- Developer Mode still reports OFF (`amfi developer-mode-status` = false), so iOS will refuse to open the app until Matteo turns it on (Settings → Privacy & Security → Developer Mode → On → Restart → Turn On). It can't be switched on from the PC because the phone has a passcode.
+- **Next:** once it's on, open Lockout and run docs/TEST-CHECKLIST.md section A (onboarding + 2-minute test lock), then fill LOOPHOLES.md "On device".
+
 ## 2026-11-03 18:25 ET: first installable build ready, waiting on the phone
 
 - `ios-dev-0.1.0-b3` (Codemagic build 6aea6af1278b7d31e9043ac4) green: tests, dev signing for 3 IDs, .ipa, check-ipa ("3 targets entitled, no networking, Release build clean").
