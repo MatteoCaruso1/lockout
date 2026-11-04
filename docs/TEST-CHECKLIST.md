@@ -5,14 +5,13 @@ Do these in order. Each test begins with a short lock, so a mistake never costs 
 **Before you start:** the newest build is installed (see README "Install on your iPhone"), and you have about 45 minutes. Keep a second device nearby only to read this list.
 
 ## A. Setup (onboarding)
-- [x] A1. Open Lockout. "Allow access" brings up Apple's Screen Time prompt; confirm with Face ID.
-- [x] A2. "Choose Lockout": search for Lockout, tick it, tap Done.
-- [x] A3. Remove every app except Phone from Always Allowed, as the app shows (anything left there is never blocked).
-- [x] A4. (Optional) Set Downtime to your usual nightly window.
-- [x] A5. Set the passcode Lockout shows. **Tap Cancel when iOS asks for an Apple ID.** If you did Downtime, switch on Block at Downtime. Tap "Seal it".
-- [x] A6. Start the 2-minute test lock. During it, try: Safari, Messages, Instagram (or any app), App Store, Settings. Write down which ones opened.
-- [x] A7. After 2 minutes, without touching Lockout, check that apps open again by themselves (the release comes from the extension, not the app).
-- [x] A8. Back in Lockout, answer "Yes, everything was blocked" (Settings should have opened, Apple doesn't allow blocking it).
+v0.1 setup (6 steps) was done and passed on 2026-11-03/04. v1.0 replaces it with 3 screens; check them with Home → **Replay setup** (it changes nothing already set up). Don't delete the app to test setup: that also deletes the sealed passcode.
+- [ ] A1. Replay setup: screen 1 "Allow Screen Time access" goes straight on (already allowed).
+- [ ] A2. Screen 2 shows the drawn Settings → Screen Time → Always Allowed pictures; the instructions match what your Settings app shows.
+- [ ] A3. Screen 3 "Try a 2-minute lock": the countdown goes 10…1, then "Locking…" with no Cancel, then the lock screen within a couple of seconds (this was the frozen "Locking in 1…" bug).
+- [ ] A4. During the test lock, open Lockout itself: it shows the countdown (no picker step any more, so this checks iOS doesn't block Lockout).
+- [ ] A5. After it ends, Home asks "Did every app you tried get blocked?". Answer it; the card goes away.
+- [ ] A6. Home → Strict mode shows "Strict mode is on" (your passcode from v0.1 setup is still sealed).
 
 ## B. Core lock
 - [ ] B1. Custom lock of 15 minutes. The arming screen says "You cannot end this early". Tap the button, then **Cancel** during the countdown: no lock starts.
