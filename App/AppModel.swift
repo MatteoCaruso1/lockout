@@ -89,10 +89,37 @@ final class AppModel: ObservableObject {
         }
     }
 
-    func arm(_ request: ArmRequest) {
-        mutate { state, now in
-            try state.startLock(duration: request.duration, source: request.source, now)
-            if request.source == .test { state.onboarding.testLockStartedAt = now.wall }
+    /// Start the lock off the main thread. Writing the state and applying the
+    /// shield is quick; scheduling the DeviceActivity ends can take iOS many
+    /// seconds, and doing it on the main thread froze the arming screen on
+    /// "Locking in 1…". So: save + shield, show the countdown, then schedule.
+    func arm(_ request: ArmRequest) async {
+        let duration = request.duration, source = request.source
+        let outcome: Result<(AppState, ClockReading), Error> = await Task.detached {
+            let now = DeviceClock.read()
+            do {
+                let state = try StateStore.update { state -> AppState in
+                    try state.startLock(duration: duration, source: source, now)
+                    if source == .test {
+                        state.onboarding.testLockStartedAt = now.wall
+                        state.onboarding.setupFinished = true
+                    }
+                    return state
+                }
+                Enforcer.apply(state, now)
+                return .success((state, now))
+            } catch {
+                return .failure(error)
+            }
+        }.value
+        switch outcome {
+        case .success(let (state, now)):
+            self.state = state
+            current = now
+            lastRefresh = Date()
+            Task.detached { Enforcer.refresh(reason: "arm") }
+        case .failure(let error):
+            errorMessage = Format.error(error)
         }
     }
 
@@ -135,8 +162,12 @@ final class AppModel: ObservableObject {
         mutate { state, _ in state.onboarding[keyPath: key] = value }
     }
 
-    func resetTestLock() {
-        mutate { state, _ in state.onboarding.testLockStartedAt = nil }
+    /// Clear the last test's result so Home asks how this one went.
+    func prepareTestLock() {
+        mutate { state, _ in
+            state.onboarding.testLockStartedAt = nil
+            state.onboarding.testLockPassed = false
+        }
     }
 
     func requestAuthorization() async {
@@ -147,11 +178,6 @@ final class AppModel: ObservableObject {
         } catch {
             errorMessage = "Screen Time access was not granted (\(error.localizedDescription)). Lockout cannot lock anything without it."
         }
-    }
-
-    func saveExemption(_ selection: FamilyActivitySelection) {
-        ExemptionStore.save(selection)
-        setOnboarding(\.exemptionPicked)
     }
 
     #if DEBUG

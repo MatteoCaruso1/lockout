@@ -29,7 +29,7 @@ struct PasscodeView: View {
                 }
             } else {
                 Section {
-                    Text("No sealed passcode yet. It is set up during onboarding.")
+                    Text("No sealed passcode yet. Turn on Strict mode from the home screen to set one.")
                 }
             }
         }

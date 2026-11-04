@@ -5,12 +5,23 @@ struct HomeView: View {
     @EnvironmentObject private var model: AppModel
     @State private var armRequest: ArmRequest?
     @State private var showCustom = false
+    @State private var showSetup = false
 
     private let columns = [GridItem(.adaptive(minimum: 90), spacing: 12)]
 
     var body: some View {
         NavigationStack {
             List {
+                if let started = model.state.onboarding.testLockStartedAt, !model.state.onboarding.testLockPassed {
+                    Section("Your test lock") {
+                        Text("Did every app you tried get blocked during the test that started \(Format.clock(started))?")
+                        Button("Yes, everything was blocked") { model.setOnboarding(\.testLockPassed) }
+                        // Answering here would remove this row while its
+                        // screen is open and pop it, so the card stays until "Yes".
+                        NavigationLink("Something still opened") { AlwaysAllowedView() }
+                    }
+                }
+
                 Section("Lock me out for") {
                     LazyVGrid(columns: columns, spacing: 12) {
                         ForEach(Limits.presetHours, id: \.self) { hours in
@@ -39,14 +50,41 @@ struct HomeView: View {
                     }
                 }
 
+                if model.state.onboarding.stricterStepsLeft > 0 {
+                    Section {
+                        if !model.state.onboarding.messagesRemoved {
+                            NavigationLink { AlwaysAllowedView() } label: {
+                                stricterRow("Block Messages and Maps too", "iOS lets them through until you remove them from Always Allowed.", "message.fill")
+                            }
+                        }
+                        if !model.state.onboarding.passcodeSealed {
+                            NavigationLink { StrictModeView() } label: {
+                                stricterRow("Strict mode", "Stop Screen Time itself from being switched off.", "lock.shield.fill")
+                            }
+                        }
+                    } header: {
+                        Text("Make it stricter")
+                    }
+                }
+
                 Section {
-                    NavigationLink("Screen Time passcode") { PasscodeView() }
+                    Button("Try a 2-minute lock") {
+                        model.prepareTestLock()
+                        armRequest = ArmRequest(duration: Limits.testLockDuration, source: .test)
+                    }
+                    if model.state.onboarding.passcodeSealed {
+                        NavigationLink("Strict mode") { StrictModeView() }
+                    }
                     NavigationLink("History") { HistoryView() }
+                    Button("Replay setup") { showSetup = true }
                 }
             }
             .navigationTitle("Lockout")
             .sheet(item: $armRequest) { request in
                 ArmView(request: request)
+            }
+            .sheet(isPresented: $showSetup) {
+                OnboardingView(replay: true)
             }
             .sheet(isPresented: $showCustom) {
                 CustomDurationView { seconds in
@@ -57,6 +95,16 @@ struct HomeView: View {
                     }
                 }
                 .presentationDetents([.medium])
+            }
+        }
+    }
+
+    private func stricterRow(_ title: String, _ detail: String, _ icon: String) -> some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon).foregroundStyle(.orange).frame(width: 24)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                Text(detail).font(.caption).foregroundStyle(.secondary)
             }
         }
     }

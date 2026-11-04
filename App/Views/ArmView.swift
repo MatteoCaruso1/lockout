@@ -8,6 +8,7 @@ struct ArmView: View {
     @Environment(\.dismiss) private var dismiss
     let request: ArmRequest
     @State private var countdown: Int?
+    @State private var locking = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -17,7 +18,13 @@ struct ArmView: View {
             Text("Not even restarting the phone or deleting Lockout will end it.")
                 .foregroundStyle(.secondary)
             Spacer()
-            if let countdown {
+            if locking {
+                HStack(spacing: 12) {
+                    ProgressView()
+                    Text("Locking…").font(.title)
+                }
+                .frame(maxWidth: .infinity)
+            } else if let countdown {
                 Text("Locking in \(countdown)…")
                     .font(.title.monospacedDigit())
                     .frame(maxWidth: .infinity)
@@ -43,14 +50,16 @@ struct ArmView: View {
             }
         }
         .padding(24)
-        .interactiveDismissDisabled(countdown != nil)
+        .interactiveDismissDisabled(countdown != nil || locking)
         .task(id: countdown) {
             guard let value = countdown else { return }
             try? await Task.sleep(nanoseconds: 1_000_000_000)
             guard countdown == value else { return }
             if value <= 1 {
-                countdown = nil
-                model.arm(request)
+                // Past the point of no return: Cancel disappears now, before
+                // the work starts, not after it.
+                locking = true
+                await model.arm(request)
                 dismiss()
             } else {
                 countdown = value - 1

@@ -303,3 +303,32 @@ final class MonitorPlanTests: XCTestCase {
         XCTAssertLessThanOrEqual(specs.count, Limits.maxMonitors)
     }
 }
+
+final class OnboardingMigrationTests: XCTestCase {
+    func testFinishedV01SetupStaysFinished() throws {
+        let json = #"{"authorized":true,"exemptionPicked":true,"messagesRemoved":true,"downtimeStepSeen":true,"passcodeSealed":true,"testLockPassed":true}"#
+        let o = try JSONDecoder().decode(OnboardingState.self, from: Data(json.utf8))
+        XCTAssertTrue(o.setupFinished)
+        XCTAssertTrue(o.isComplete)
+        XCTAssertEqual(o.stricterStepsLeft, 0)
+    }
+
+    func testHalfwayV01SetupShowsNewSetup() throws {
+        let json = #"{"authorized":true,"exemptionPicked":true}"#
+        let o = try JSONDecoder().decode(OnboardingState.self, from: Data(json.utf8))
+        XCTAssertFalse(o.setupFinished)
+        XCTAssertFalse(o.isComplete)
+        XCTAssertEqual(o.stricterStepsLeft, 2)
+    }
+
+    func testRevokedAccessReopensSetupButKeepsItFinished() throws {
+        var o = OnboardingState()
+        o.authorized = true
+        o.setupFinished = true
+        XCTAssertTrue(o.isComplete)
+        o.authorized = false
+        XCTAssertFalse(o.isComplete)
+        let round = try JSONDecoder().decode(OnboardingState.self, from: JSONEncoder().encode(o))
+        XCTAssertTrue(round.setupFinished)
+    }
+}

@@ -108,23 +108,34 @@ public struct LogEvent: Codable, Equatable {
 
 public struct OnboardingState: Codable, Equatable {
     public var authorized = false
+    /// Only set by v0.1 setup; v0.2 setup no longer asks (an app with Screen
+    /// Time access is not shielded by its own settings).
     public var exemptionPicked = false
+    /// Settings → Screen Time → Always Allowed emptied (all but Phone).
     public var messagesRemoved = false
     public var downtimeStepSeen = false
+    /// Strict mode: the Screen Time passcode is set and sealed.
     public var passcodeSealed = false
     public var testLockStartedAt: Date?
     public var testLockPassed = false
+    /// The 3-screen setup (v0.2) has been finished. Older saved files that
+    /// finished the v0.1 setup count as finished.
+    public var setupFinished = false
 
     public init() {}
 
-    public var isComplete: Bool {
-        authorized && messagesRemoved && passcodeSealed && testLockPassed
+    /// Setup is done and Lockout still has Screen Time access.
+    public var isComplete: Bool { authorized && setupFinished }
+
+    /// Optional hardening the Home screen still suggests.
+    public var stricterStepsLeft: Int {
+        (messagesRemoved ? 0 : 1) + (passcodeSealed ? 0 : 1)
     }
 
     // Every field is optional when reading, so adding a field in a later
     // version never makes an old saved file unreadable.
     enum CodingKeys: String, CodingKey {
-        case authorized, exemptionPicked, messagesRemoved, downtimeStepSeen, passcodeSealed, testLockStartedAt, testLockPassed
+        case authorized, exemptionPicked, messagesRemoved, downtimeStepSeen, passcodeSealed, testLockStartedAt, testLockPassed, setupFinished
     }
 
     public init(from decoder: Decoder) throws {
@@ -136,5 +147,7 @@ public struct OnboardingState: Codable, Equatable {
         passcodeSealed = try c.decodeIfPresent(Bool.self, forKey: .passcodeSealed) ?? false
         testLockStartedAt = try c.decodeIfPresent(Date.self, forKey: .testLockStartedAt)
         testLockPassed = try c.decodeIfPresent(Bool.self, forKey: .testLockPassed) ?? false
+        setupFinished = try c.decodeIfPresent(Bool.self, forKey: .setupFinished)
+            ?? (messagesRemoved && passcodeSealed && testLockPassed)
     }
 }
