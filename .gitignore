@@ -20,3 +20,10 @@ node_modules/
 *.p12
 *.key
 *.pem
+
+# Working notes for AI sessions and Apple paperwork: kept on this laptop only,
+# never published (the repo is public)
+CLAUDE.md
+handoff/
+docs/APP-STORE.md
+docs/FAMILY-CONTROLS-REQUEST.md
